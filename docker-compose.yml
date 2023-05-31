@@ -1,0 +1,22 @@
+version: '3.3'
+
+services:
+  # meteor-app:
+  #   container_name: meteor-app
+  #   build: ./
+  #   restart: unless-stopped
+  #   ports:
+  #     - 4041:4041
+  #   volumes:
+  #     - ./volumes/logs:/app/logs
+
+  elasticsearch:
+    container_name: meteor_elasticsearch
+    image: 'docker.elastic.co/elasticsearch/elasticsearch:7.10.2'
+    environment:
+      - discovery.type=single-node
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+    ports:
+      - "9200:9200"
+    volumes:
+      - ./volumes/elasticsearch/data:/usr/share/elasticsearch/data

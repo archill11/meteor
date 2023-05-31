@@ -1,0 +1,156 @@
+definitions:
+  controllers.ErrorResponse:
+    properties:
+      error: {}
+    type: object
+  models.Delivery:
+    description: Куда
+    properties:
+      cityId:
+        example: "49265227"
+        type: string
+      cityName:
+        example: Челябинск
+        type: string
+      countryCode:
+        example: RU
+        type: string
+      index:
+        example: "140012"
+        type: string
+      regionCode:
+        example: "74"
+        type: string
+    type: object
+  models.Parcel:
+    description: Посылка
+    properties:
+      height:
+        example: 20
+        type: integer
+      length:
+        example: 20
+        type: integer
+      quantity:
+        example: 1
+        type: integer
+      weight:
+        example: 5
+        type: integer
+      width:
+        example: 20
+        type: integer
+    type: object
+  models.Pickup:
+    description: Откуда
+    properties:
+      cityId:
+        example: "49694102"
+        type: string
+      cityName:
+        example: Москва
+        type: string
+      countryCode:
+        example: RU
+        type: string
+      index:
+        example: "140012"
+        type: string
+      regionCode:
+        example: "77"
+        type: string
+    type: object
+  models.RequestGetServiceCost:
+    properties:
+      delivery:
+        $ref: '#/definitions/models.Delivery'
+      parcel:
+        $ref: '#/definitions/models.Parcel'
+      pickup:
+        $ref: '#/definitions/models.Pickup'
+      selfDelivery:
+        description: самовывоз получателя
+        example: true
+        type: boolean
+      selfPickup:
+        description: самовывоз отправителя
+        example: false
+        type: boolean
+    type: object
+  models.ResponseGetServiceCost:
+    properties:
+      services:
+        items:
+          $ref: '#/definitions/models.Service'
+        type: array
+    type: object
+  models.Service:
+    properties:
+      cost:
+        type: string
+      days:
+        type: string
+      serviceCode:
+        type: string
+      serviceName:
+        type: string
+    type: object
+host: localhost:9090
+info:
+  contact: {}
+  description: description
+  title: meteor
+  version: "0.1"
+paths:
+  /api/v1/get-service-cost:
+    post:
+      consumes:
+      - application/json
+      description: рассчитать стоимость доставки по параметрам посылок
+      parameters:
+      - description: данные заказа
+        in: body
+        name: ServiceData
+        required: true
+        schema:
+          $ref: '#/definitions/models.RequestGetServiceCost'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.ResponseGetServiceCost'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/controllers.ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/controllers.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/controllers.ErrorResponse'
+      summary: рассчитать стоимость доставки по параметрам посылок
+      tags:
+      - Marketplace
+  /health:
+    get:
+      consumes:
+      - application/json
+      description: Проверка работоспособности
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/controllers.ErrorResponse'
+      summary: проверка работоспособности
+      tags:
+      - Health
+swagger: "2.0"

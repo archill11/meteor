@@ -1,0 +1,6 @@
+.bin
+.vscode
+*secret.yaml
+.idea/
+info.log
+.env
