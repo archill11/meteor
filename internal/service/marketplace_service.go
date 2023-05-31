@@ -8,6 +8,7 @@ import (
 	"meteor/internal/models"
 	"net/http"
 	"strings"
+	"time"
 
 	"github.com/valyala/fasthttp"
 )
@@ -63,7 +64,20 @@ func (s *Service) GetServiceCost(ctx *fasthttp.RequestCtx, body models.RequestGe
 		body.Parcel.Weight, body.Parcel.Length, body.Parcel.Width, body.Parcel.Height, body.Parcel.Quantity,
 	)
 
-	resp, err := http.Post("http://ws.dpd.ru/services/calculator2?wsdl", "text/xml", strings.NewReader(xmlbody))
+
+	url := "http://ws.dpd.ru/services/calculator2?wsdl"
+    method := "POST"
+
+    client := &http.Client{
+		Timeout: time.Second * 60,
+    }
+    req, err := http.NewRequest(method, url, strings.NewReader(xmlbody))
+	if err != nil {
+        return nil, fmt.Errorf("GetServiceCost http.NewRequest: %v", err)
+    }
+
+	// resp, err := http.Post("", "text/xml", )
+	resp, err := client.Do(req)
 	if err != nil {
 		return nil, fmt.Errorf("GetServiceCost http.Post: %v", err)
 	}
