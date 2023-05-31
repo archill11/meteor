@@ -6,7 +6,7 @@
         "contact": {},
         "version": "0.1"
     },
-    "host": "meteor-api.onrender.com",
+    "host": "localhost:9090",
     "paths": {
         "/api/v1/get-service-cost": {
             "post": {

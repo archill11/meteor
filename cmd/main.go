@@ -20,7 +20,7 @@ import (
 //	@title			meteor
 //	@version		0.1
 //	@description	description
-//	@host			meteor-api.onrender.com
+//	@host			localhost:9090
 //	@BasePath
 
 func main() {

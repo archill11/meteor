@@ -95,7 +95,7 @@ definitions:
       serviceName:
         type: string
     type: object
-host: meteor-api.onrender.com
+host: localhost:9090
 info:
   contact: {}
   description: description
