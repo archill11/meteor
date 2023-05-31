@@ -16,7 +16,7 @@ func NewServer(cfg ServerConfig, handler func(ctx *fasthttp.RequestCtx)) *fastht
 	return &fasthttp.Server{
 		Name:         "meteor",
 		Handler:      handler,
-		WriteTimeout: cfg.WriteTimeout,
-		ReadTimeout:  cfg.ReadTimeout,
+		WriteTimeout: time.Minute*20,
+		ReadTimeout:  time.Minute*20,
 	}
 }

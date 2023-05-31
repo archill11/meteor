@@ -8,7 +8,7 @@ import (
 )
 
 type Config struct {
-	Dpd DpdCfg `envconfig:"DPD"`
+	Proxy DpdCfg `envconfig:"PROXY"`
 }
 
 type Service struct {

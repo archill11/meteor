@@ -8,7 +8,7 @@ type RequestGetServiceCost struct {
 	Parcel       Parcel   `json:"parcel"`
 }
 
-// @Description	Откуда
+//	@Description	Откуда
 type Pickup struct {
 	CityId      string `json:"cityId" example:"49694102"`
 	Index       string `json:"index" example:"140012"`
@@ -17,7 +17,7 @@ type Pickup struct {
 	CountryCode string `json:"countryCode" example:"RU"`
 }
 
-// @Description	Куда
+//	@Description	Куда
 type Delivery struct {
 	CityId      string `json:"cityId" example:"49265227"`
 	Index       string `json:"index" example:"140012"`
@@ -26,7 +26,7 @@ type Delivery struct {
 	CountryCode string `json:"countryCode" example:"RU"`
 }
 
-// @Description	Посылка
+//	@Description	Посылка
 type Parcel struct {
 	Weight   int `json:"weight" example:"5"`
 	Length   int `json:"length" example:"20"`
