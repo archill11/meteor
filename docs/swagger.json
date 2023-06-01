@@ -9,7 +9,7 @@
     "host": "meteor-api.onrender.com",
     "paths": {
         "/api/v1/get-service-cost": {
-            "get": {
+            "post": {
                 "description": "рассчитать стоимость доставки по параметрам посылок",
                 "consumes": [
                     "application/json"
