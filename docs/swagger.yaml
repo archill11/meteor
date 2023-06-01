@@ -103,7 +103,7 @@ info:
   version: "0.1"
 paths:
   /api/v1/get-service-cost:
-    get:
+    post:
       consumes:
       - application/json
       description: рассчитать стоимость доставки по параметрам посылок
