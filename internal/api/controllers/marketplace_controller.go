@@ -33,7 +33,7 @@ func NewMarketplaceControllerFromBase(base *BaseController) *MarketplaceControll
 //	@Failure		400			{object}	ErrorResponse
 //	@Failure		404			{object}	ErrorResponse
 //	@Failure		500			{object}	ErrorResponse
-//	@Router			/api/v1/get-service-cost [post]
+//	@Router			/api/v1/get-service-cost [get]
 func (c *MarketplaceController) GetServiceCost(ctx *fasthttp.RequestCtx, ps fasthttprouter.Params) {
 
 	var bodyy models.RequestGetServiceCost
