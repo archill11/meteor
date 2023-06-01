@@ -19,7 +19,7 @@ func NewRouters(routers Routers) func(ctx *fasthttp.RequestCtx) {
 	router.GET("/health", routers.HealthCheck)
 	router.GET("/swagger/*filepath", routers.HandleDocs)
 
-	router.POST("/api/v1/get-service-cost", routers.GetServiceCost)
+	router.GET("/api/v1/get-service-cost", routers.GetServiceCost)
 
 	return Handler
 }

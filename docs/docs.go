@@ -17,7 +17,7 @@ const docTemplate = `{
     "basePath": "{{.BasePath}}",
     "paths": {
         "/api/v1/get-service-cost": {
-            "post": {
+            "get": {
                 "description": "рассчитать стоимость доставки по параметрам посылок",
                 "consumes": [
                     "application/json"
