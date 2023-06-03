@@ -11,6 +11,7 @@ import (
 	"time"
 
 	"github.com/valyala/fasthttp"
+	"go.uber.org/zap"
 )
 
 type DpdCfg struct {
@@ -64,6 +65,7 @@ func (s *Service) GetServiceCost(ctx *fasthttp.RequestCtx, body models.RequestGe
 		body.Parcel.Weight, body.Parcel.Length, body.Parcel.Width, body.Parcel.Height, body.Parcel.Quantity,
 	)
 
+	s.Logger.Info("GetServiceCost", zap.Any("RequestGetServiceCost", body))
 
 	url := "https://ws.dpd.ru/services/calculator2?wsdl"
     method := "POST"

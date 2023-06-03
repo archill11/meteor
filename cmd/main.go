@@ -31,7 +31,7 @@ func main() {
 
 	// zapCfg := zap.NewProductionConfig()
 	zapCfg := zap.NewDevelopmentConfig()
-	zapCfg.OutputPaths = []string{"stderr"}
+	zapCfg.OutputPaths = []string{"logs/info.log", "stderr"}
 	logger, err := zapCfg.Build()
 	if err != nil {
 		log.Fatal("can't init logger", err)
