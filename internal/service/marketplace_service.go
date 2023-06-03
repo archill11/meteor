@@ -65,7 +65,7 @@ func (s *Service) GetServiceCost(ctx *fasthttp.RequestCtx, body models.RequestGe
 	)
 
 
-	url := "http://ws.dpd.ru/services/calculator2?wsdl"
+	url := "https://ws.dpd.ru/services/calculator2?wsdl"
     method := "POST"
 
     client := &http.Client{
