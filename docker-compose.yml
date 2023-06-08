@@ -6,9 +6,7 @@ services:
     build: ./
     restart: unless-stopped
     ports:
-      - 4041:4041
-    volumes:
-      - ./volumes/logs:/app/logs
+      - 9090:9090
 
   # elasticsearch:
   #   container_name: elasticsearch
