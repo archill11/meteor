@@ -21,7 +21,7 @@ func New() (*Config, error) {
 	if err != nil {
 		return nil, fmt.Errorf("error loading .env file: %v", err)
 	}
-	
+
 	var cfg = new(Config)
 
 	if err := envconfig.Process("", cfg); err != nil {

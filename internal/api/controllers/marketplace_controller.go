@@ -45,10 +45,51 @@ func (c *MarketplaceController) GetServiceCost(ctx *fasthttp.RequestCtx, ps fast
 		return
 	}
 
+	pickupSity, err := c.service.GetCityByName(bodyy.Pickup.CityName)
+	if err != nil {
+		c.logger.Error("GetCityByName", zap.Error(err))
+		errByte, _ := c.json.Marshal(ErrorResponse{err.Error()})
+		c.response(ctx, fasthttp.StatusBadRequest, errByte)
+		return
+	}
+	deliverySity, err := c.service.GetCityByName(bodyy.Delivery.CityName)
+	if err != nil {
+		c.logger.Error("GetCityByName", zap.Error(err))
+		errByte, _ := c.json.Marshal(ErrorResponse{err.Error()})
+		c.response(ctx, fasthttp.StatusBadRequest, errByte)
+		return
+	}
+	bodyy.Pickup = pickupSity
+	bodyy.Delivery = deliverySity
+
 	data, err := c.service.GetServiceCost(ctx, bodyy)
 	if err != nil {
 		err = fmt.Errorf("get order statuses err: %v", err)
 		c.logger.Error("GetServiceCost", zap.Error(err))
+		errByte, _ := c.json.Marshal(ErrorResponse{err.Error()})
+		c.response(ctx, fasthttp.StatusInternalServerError, errByte)
+		return
+	}
+
+	c.response(ctx, fasthttp.StatusOK, data)
+}
+
+// GetCitiesCashPay
+//
+//	@Tags			Marketplace
+//	@Summary		список городов
+//	@Description	список городов
+//	@Produce		json
+//	@Success		200	{object}	models.ResponseGetCitiesCashPay
+//	@Failure		400	{object}	ErrorResponse
+//	@Failure		404	{object}	ErrorResponse
+//	@Failure		500	{object}	ErrorResponse
+//	@Router			/api/v1/get-cities-cash-pay [get]
+func (c *MarketplaceController) GetCitiesCashPay(ctx *fasthttp.RequestCtx, ps fasthttprouter.Params) {
+	data, err := c.service.GetCitiesCashPay()
+	if err != nil {
+		err = fmt.Errorf("get order statuses err: %v", err)
+		c.logger.Error("GetCitiesCashPay", zap.Error(err))
 		errByte, _ := c.json.Marshal(ErrorResponse{err.Error()})
 		c.response(ctx, fasthttp.StatusInternalServerError, errByte)
 		return

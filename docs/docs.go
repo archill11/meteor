@@ -16,6 +16,44 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
+        "/api/v1/get-cities-cash-pay": {
+            "get": {
+                "description": "список городов",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Marketplace"
+                ],
+                "summary": "список городов",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/models.ResponseGetCitiesCashPay"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/controllers.ErrorResponse"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/controllers.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/controllers.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
         "/api/v1/get-service-cost": {
             "post": {
                 "description": "рассчитать стоимость доставки по параметрам посылок",
@@ -102,29 +140,44 @@ const docTemplate = `{
                 "error": {}
             }
         },
-        "models.Delivery": {
-            "description": "Куда",
+        "models.City": {
             "type": "object",
             "properties": {
+                "abbreviation": {
+                    "type": "string"
+                },
+                "cityCode": {
+                    "type": "string"
+                },
                 "cityId": {
                     "type": "string",
-                    "example": "49265227"
+                    "example": "49694102"
                 },
                 "cityName": {
                     "type": "string",
-                    "example": "Челябинск"
+                    "example": "Москва"
                 },
                 "countryCode": {
                     "type": "string",
                     "example": "RU"
                 },
-                "index": {
+                "countryName": {
+                    "type": "string"
+                },
+                "indexMax": {
+                    "type": "string",
+                    "example": "140012"
+                },
+                "indexMin": {
                     "type": "string",
                     "example": "140012"
                 },
                 "regionCode": {
                     "type": "string",
-                    "example": "74"
+                    "example": "77"
+                },
+                "regionName": {
+                    "type": "string"
                 }
             }
         },
@@ -154,43 +207,27 @@ const docTemplate = `{
                 }
             }
         },
-        "models.Pickup": {
-            "description": "Откуда",
-            "type": "object",
-            "properties": {
-                "cityId": {
-                    "type": "string",
-                    "example": "49694102"
-                },
-                "cityName": {
-                    "type": "string",
-                    "example": "Москва"
-                },
-                "countryCode": {
-                    "type": "string",
-                    "example": "RU"
-                },
-                "index": {
-                    "type": "string",
-                    "example": "140012"
-                },
-                "regionCode": {
-                    "type": "string",
-                    "example": "77"
-                }
-            }
-        },
         "models.RequestGetServiceCost": {
             "type": "object",
             "properties": {
                 "delivery": {
-                    "$ref": "#/definitions/models.Delivery"
+                    "description": "куда",
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/models.City"
+                        }
+                    ]
                 },
                 "parcel": {
                     "$ref": "#/definitions/models.Parcel"
                 },
                 "pickup": {
-                    "$ref": "#/definitions/models.Pickup"
+                    "description": "откуда",
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/models.City"
+                        }
+                    ]
                 },
                 "selfDelivery": {
                     "description": "самовывоз получателя",
@@ -201,6 +238,17 @@ const docTemplate = `{
                     "description": "самовывоз отправителя",
                     "type": "boolean",
                     "example": false
+                }
+            }
+        },
+        "models.ResponseGetCitiesCashPay": {
+            "type": "object",
+            "properties": {
+                "cities": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/models.City"
+                    }
                 }
             }
         },

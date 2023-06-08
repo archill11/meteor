@@ -3,23 +3,33 @@ definitions:
     properties:
       error: {}
     type: object
-  models.Delivery:
-    description: Куда
+  models.City:
     properties:
+      abbreviation:
+        type: string
+      cityCode:
+        type: string
       cityId:
-        example: "49265227"
+        example: "49694102"
         type: string
       cityName:
-        example: Челябинск
+        example: Москва
         type: string
       countryCode:
         example: RU
         type: string
-      index:
+      countryName:
+        type: string
+      indexMax:
+        example: "140012"
+        type: string
+      indexMin:
         example: "140012"
         type: string
       regionCode:
-        example: "74"
+        example: "77"
+        type: string
+      regionName:
         type: string
     type: object
   models.Parcel:
@@ -41,33 +51,18 @@ definitions:
         example: 20
         type: integer
     type: object
-  models.Pickup:
-    description: Откуда
-    properties:
-      cityId:
-        example: "49694102"
-        type: string
-      cityName:
-        example: Москва
-        type: string
-      countryCode:
-        example: RU
-        type: string
-      index:
-        example: "140012"
-        type: string
-      regionCode:
-        example: "77"
-        type: string
-    type: object
   models.RequestGetServiceCost:
     properties:
       delivery:
-        $ref: '#/definitions/models.Delivery'
+        allOf:
+        - $ref: '#/definitions/models.City'
+        description: куда
       parcel:
         $ref: '#/definitions/models.Parcel'
       pickup:
-        $ref: '#/definitions/models.Pickup'
+        allOf:
+        - $ref: '#/definitions/models.City'
+        description: откуда
       selfDelivery:
         description: самовывоз получателя
         example: true
@@ -76,6 +71,13 @@ definitions:
         description: самовывоз отправителя
         example: false
         type: boolean
+    type: object
+  models.ResponseGetCitiesCashPay:
+    properties:
+      cities:
+        items:
+          $ref: '#/definitions/models.City'
+        type: array
     type: object
   models.ResponseGetServiceCost:
     properties:
@@ -102,6 +104,31 @@ info:
   title: meteor
   version: "0.1"
 paths:
+  /api/v1/get-cities-cash-pay:
+    get:
+      description: список городов
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.ResponseGetCitiesCashPay'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/controllers.ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/controllers.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/controllers.ErrorResponse'
+      summary: список городов
+      tags:
+      - Marketplace
   /api/v1/get-service-cost:
     post:
       consumes:
