@@ -4,6 +4,7 @@ import (
 	"fmt"
 	_ "meteor/docs"
 	"meteor/internal/models"
+	"strconv"
 
 	"go.uber.org/zap"
 
@@ -35,7 +36,6 @@ func NewMarketplaceControllerFromBase(base *BaseController) *MarketplaceControll
 //	@Failure		500			{object}	ErrorResponse
 //	@Router			/api/v1/get-service-cost [post]
 func (c *MarketplaceController) GetServiceCost(ctx *fasthttp.RequestCtx, ps fasthttprouter.Params) {
-
 	var bodyy models.RequestGetServiceCost
 	if err := c.json.Unmarshal(ctx.Request.Body(), &bodyy); err != nil {
 		err := fmt.Errorf("can't decode body: %v", err)
@@ -80,13 +80,33 @@ func (c *MarketplaceController) GetServiceCost(ctx *fasthttp.RequestCtx, ps fast
 //	@Summary		список городов
 //	@Description	список городов
 //	@Produce		json
+//	@Param			limit query string true "limit городов"
 //	@Success		200	{object}	models.ResponseGetCitiesCashPay
 //	@Failure		400	{object}	ErrorResponse
 //	@Failure		404	{object}	ErrorResponse
 //	@Failure		500	{object}	ErrorResponse
 //	@Router			/api/v1/get-cities-cash-pay [get]
 func (c *MarketplaceController) GetCitiesCashPay(ctx *fasthttp.RequestCtx, ps fasthttprouter.Params) {
-	data, err := c.service.GetCitiesCashPay()
+	limitStr := string(ctx.QueryArgs().Peek("limit"))
+	if limitStr == "" {
+		limitStr = "0"
+	}
+	limit, err := strconv.Atoi(limitStr)
+	if err != nil {
+		err = fmt.Errorf("strconv.Atoi err: %v", err)
+		c.logger.Error("GetCitiesCashPay", zap.Error(err))
+		errByte, _ := c.json.Marshal(ErrorResponse{err.Error()})
+		c.response(ctx, fasthttp.StatusBadRequest, errByte)
+		return
+	}
+	if limit < 0 {
+		err = fmt.Errorf("limit < 0")
+		c.logger.Error("GetCitiesCashPay", zap.Error(err))
+		errByte, _ := c.json.Marshal(ErrorResponse{err.Error()})
+		c.response(ctx, fasthttp.StatusBadRequest, errByte)
+		return
+	}
+	data, err := c.service.GetCitiesCashPay(limit)
 	if err != nil {
 		err = fmt.Errorf("get order statuses err: %v", err)
 		c.logger.Error("GetCitiesCashPay", zap.Error(err))

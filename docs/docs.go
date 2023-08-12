@@ -26,6 +26,15 @@ const docTemplate = `{
                     "Marketplace"
                 ],
                 "summary": "список городов",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "limit городов",
+                        "name": "limit",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "OK",

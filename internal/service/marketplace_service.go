@@ -153,7 +153,7 @@ type EnvelopeGetCitiesCashPay struct {
 	} `xml:"Body"`
 }
 
-func (s *Service) GetCitiesCashPay() ([]byte, error) {
+func (s *Service) GetCitiesCashPay(limit int) ([]byte, error) {
 	xmlbody := fmt.Sprintf(`
 		<SOAP-ENV:Envelope
 			xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/" xmlns:ns1="http://dpd.ru/ws/geography/2015-05-20">
@@ -194,18 +194,28 @@ func (s *Service) GetCitiesCashPay() ([]byte, error) {
 		return nil, fmt.Errorf("GetServiceCost Error unmarshalling to XML: %v", err)
 	}
 
+	if limit != 0 {
+		if limit >= len(cAny.Body.GetCitiesCashPayResponse.Return) {
+			limit = len(cAny.Body.GetCitiesCashPayResponse.Return)-1
+		}
+		result, err := json.Marshal(cAny.Body.GetCitiesCashPayResponse.Return[:limit])
+		if nil != err {
+			return nil, fmt.Errorf("GetServiceCost Error marshalling to JSON: %v", err)
+		}
+		return result, nil
+	}
+
 	result, err := json.Marshal(cAny.Body.GetCitiesCashPayResponse.Return)
 	if nil != err {
 		return nil, fmt.Errorf("GetServiceCost Error marshalling to JSON: %v", err)
 	}
-
 	return result, nil
 }
 
 func (s *Service) GetCityByName(sity string) (models.City, error) {
 	var si models.City
 
-	cities, err := s.GetCitiesCashPay()
+	cities, err := s.GetCitiesCashPay(0)
 	if nil != err {
 		return si, fmt.Errorf("GetCityByName: %v", err)
 	}

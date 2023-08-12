@@ -107,6 +107,12 @@ paths:
   /api/v1/get-cities-cash-pay:
     get:
       description: список городов
+      parameters:
+      - description: limit городов
+        in: query
+        name: limit
+        required: true
+        type: string
       produces:
       - application/json
       responses:
